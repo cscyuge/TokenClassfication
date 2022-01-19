@@ -17,26 +17,47 @@ with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
         true_keyword = ""
         keywords = []
         true_keywords = []
+        preoutput=prelabel=0
         for line in sample.split('\n'):
             t = line.split(' ')
             if t[0]=='[PAD]':continue
             cnt +=1
             label = t[-2]
             output = t[-1]
-            label = 1 if label=='1' else 0
-            output = 1 if output=='1' else 0
+            label = ord(label)-ord('0')
+            output = ord(output)-ord('0')
+
             if output == 1:
-                keyword += t[0]
-            else:
                 if keyword!="":
                     keywords.append(keyword)
+                keyword = t[0]
+            elif output==3:
+                keyword += t[0]
+            elif output==4:
+                keyword += t[0]
+                keywords.append(keyword)
+                keyword = ""
+            elif output==0:
+                if keyword!="" and preoutput==1:
+                    keywords.append(keyword)
                     keyword=""
+
             if label == 1:
-                true_keyword += t[0]
-            else:
                 if true_keyword != "":
                     true_keywords.append(true_keyword)
+                true_keyword = t[0]
+            elif label == 3:
+                true_keyword += t[0]
+            elif label == 4:
+                true_keyword += t[0]
+                true_keywords.append(true_keyword)
+                true_keyword = ""
+            elif label == 0:
+                if true_keyword != "" and prelabel == 1:
+                    true_keywords.append(true_keyword)
                     true_keyword = ""
+            preoutput = output
+            prelabel = label
 
             labels.append(label)
             outputs.append(output)
@@ -50,9 +71,9 @@ with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
     print(predictions[:50])
     print(true_labels[:50])
     acc = accuracy_score(predictions, true_labels)
-    precision = precision_score(predictions, true_labels)
-    recall_score = recall_score(predictions, true_labels)
-    f1 = f1_score(predictions, true_labels)
+    precision = precision_score(predictions, true_labels, average='micro')
+    recall_score = recall_score(predictions, true_labels, average='micro')
+    f1 = f1_score(predictions, true_labels, average='micro')
     print('token level accuracy:',acc)
     print('token level f1:',f1)
     print('token level precision:',precision)
@@ -66,9 +87,9 @@ p_n = 0
 g_n = 0
 
 for p_ks, y_ks in zip(predict_keywords, keywords_all):
-    print(p_ks)
-    print(y_ks)
-    print()
+    # print(p_ks)
+    # print(y_ks)
+    # print()
     p_n += len(p_ks)
     g_n += len(y_ks)
     for k in p_ks:
