@@ -32,13 +32,15 @@ with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
                     keywords.append(keyword)
                 keyword = t[0]
             elif output==3:
-                keyword += t[0]
+                if keyword!="":
+                    keyword += t[0]
             elif output==4:
-                keyword += t[0]
-                keywords.append(keyword)
-                keyword = ""
+                if keyword!="":
+                    keyword += t[0]
+                    keywords.append(keyword)
+                    keyword = ""
             elif output==0:
-                if keyword!="" and preoutput==1:
+                if keyword!="":
                     keywords.append(keyword)
                     keyword=""
 
@@ -47,13 +49,15 @@ with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
                     true_keywords.append(true_keyword)
                 true_keyword = t[0]
             elif label == 3:
-                true_keyword += t[0]
+                if true_keyword != "":
+                    true_keyword += t[0]
             elif label == 4:
-                true_keyword += t[0]
-                true_keywords.append(true_keyword)
-                true_keyword = ""
+                if true_keyword != "":
+                    true_keyword += t[0]
+                    true_keywords.append(true_keyword)
+                    true_keyword = ""
             elif label == 0:
-                if true_keyword != "" and prelabel == 1:
+                if true_keyword != "":
                     true_keywords.append(true_keyword)
                     true_keyword = ""
             preoutput = output
