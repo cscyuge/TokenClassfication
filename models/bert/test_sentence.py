@@ -94,6 +94,7 @@ for p_ks, y_ks in zip(predict_keywords, keywords_all):
     # print(p_ks)
     # print(y_ks)
     # print()
+
     p_n += len(p_ks)
     g_n += len(y_ks)
     for k in p_ks:
