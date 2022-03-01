@@ -47,7 +47,7 @@ def preprocess(dataset_all, path_to, index):
     src_all, src_ids, src_tokens = [], [], []
     tar_masks = []
     keywordset_list = []
-    worker_num = 12
+    worker_num = 8
     dataset = []
     for i in range(worker_num):
         if i == index:
