@@ -1,7 +1,7 @@
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import pickle
 
-with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
+with open('result/label_test.txt.span', 'r', encoding='utf-8') as f:
     data = f.read().split('\n\n')
     print(len(data))
     predictions = []
@@ -19,6 +19,7 @@ with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
         true_keywords = []
         preoutput=prelabel=0
         for line in sample.split('\n'):
+            if len(line)<2:continue
             t = line.split(' ')
             if t[0]=='[PAD]':continue
             cnt +=1
@@ -83,12 +84,19 @@ with open('./result/label_test.txt', 'r', encoding='utf-8') as f:
     print('token level precision:',precision)
     print('token level recall_score:',recall_score)
 
-# with open('./data/test/keywords_all.pkl','rb') as f:
-#     keywords_all = pickle.load(f)
+
 keywords_all = label_keywords
 correct = 0
 p_n = 0
 g_n = 0
+
+# with open('./data/valid/keywordset_list_char_0.pkl','rb') as f:
+#     _keywords_all = pickle.load(f)
+#
+# for u,v in zip(keywords_all, _keywords_all):
+#     print(set(u))
+#     print(set(v))
+#     print()
 
 for p_ks, y_ks in zip(predict_keywords, keywords_all):
     # print(p_ks)

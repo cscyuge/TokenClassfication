@@ -34,10 +34,10 @@ def build(hidden_size, batch_size, cuda):
     val_dataloader = build_iterator(val_data, config)
     test_dataloader = build_iterator(test_data, config)
 
-    keywords_all = pickle.load(open('./data/keywords.pkl', 'rb'))
+    train_keys = pickle.load(open('../../data/train_keys.pkl', 'rb'))
     L = len(config.tokenizer)
     new_words = []
-    for keyword in keywords_all.keys():
+    for keyword in train_keys:
         if keyword == '':
             print('empty!')
             continue
@@ -45,11 +45,8 @@ def build(hidden_size, batch_size, cuda):
         if len(config.tokenizer) > L:
             L = len(config.tokenizer)
             new_words.append(keyword)
-    keywords_all.pop('')
     model = BertForTokenClassification.from_pretrained(bert_model, num_labels=5)
     model.resize_token_embeddings(len(config.tokenizer))
-    # for i, keyword in tqdm(enumerate(new_words)):
-    #     model.embeddings.word_embeddings.weight[-len(new_words)+i, :] = keywords_all[keyword]
 
     if cuda:
         model.cuda()
@@ -69,7 +66,7 @@ def valid(model, dataloader, config):
     model.eval()
     eval_loss, eval_accuracy = 0, 0
     predictions, true_labels = [], []
-    with open('./result/label_test.txt', 'w', encoding='utf-8') as f:
+    with open('result/label_test.txt.span', 'w', encoding='utf-8') as f:
         for i, (batch_src, batch_tar) in tqdm(enumerate(dataloader)):
             x_ids = batch_src[0]
             x_mask = batch_src[1]
