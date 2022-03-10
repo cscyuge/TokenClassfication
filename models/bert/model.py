@@ -66,7 +66,7 @@ def valid(model, dataloader, config):
     model.eval()
     eval_loss, eval_accuracy = 0, 0
     predictions, true_labels = [], []
-    with open('result/label_test.txt.span', 'w', encoding='utf-8') as f:
+    with open('result/label_test.txt', 'w', encoding='utf-8') as f:
         for i, (batch_src, batch_tar) in tqdm(enumerate(dataloader)):
             x_ids = batch_src[0]
             x_mask = batch_src[1]
